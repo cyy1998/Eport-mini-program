@@ -1,0 +1,84 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.7.0",
+	"appid": "wx2af967e089a452c9",
+	"projectname": "%E4%BD%93%E8%82%B2%E5%99%A8%E6%9D%90%E6%8A%A5%E4%BF%AE",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 1,
+			"list": [
+				{
+					"id": 0,
+					"name": "mode1",
+					"pathName": "pages/login/login",
+					"query": "",
+					"scene": 1047
+				},
+				{
+					"id": 1,
+					"name": "mode2",
+					"pathName": "pages/index/index",
+					"query": "deviceID=1000000001&device_type=双人健骑机&device_model=GTX1080&phone=&detail=&url1=&url2=&url3=&url4=&orderID=",
+					"scene": 1047
+				},
+				{
+					"id": 2,
+					"name": "mode3",
+					"pathName": "pages/employee/employee",
+					"query": "deviceID=1000000000&device_type=太空漫步机&device_model=GTX1080&detail=&phone=&url1=&url2=&url3=&url4=&orderID=",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "mode4",
+					"pathName": "pages/map/map",
+					"query": "deviceID=1000000000&phone=&detail=&url1=&url2=&url3=&url4=",
+					"scene": null
+				}
+			]
+		}
+	}
+}

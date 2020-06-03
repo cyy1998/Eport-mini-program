@@ -1,0 +1,260 @@
+<!-- index.wxml -->
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">上传报修单</view>
+</cu-custom>
+<view class="bg-blue padding-sm justify-start flex">
+  <view class="text-xxl margin-top-sm" bind:tap="showModal">
+    <text class="cuIcon-sort text-white "></text>
+  </view>
+  <view class="margin-left-sm" wx:if="{{isLogin}}">
+    <i-avatar class="margin-top" size="large">
+      <open-data type="userAvatarUrl" />
+    </i-avatar>
+  </view>
+  <view class="margin-left-sm" wx:else>
+    <i-avatar class="margin-top margin-top" size="large">
+      <text class="cuIcon-people"></text>
+    </i-avatar>
+  </view>
+  <view class="text-bold margin-top-sm margin-left">用户名：{{userName}}</view>
+</view>
+<view class=" cu-modal drawer-modal justify-start {{modalName=='DrawerModal'?'show':''}}" bind:tap="hideModal">
+  <view class="cu-dialog bg-blue basis-lg" catch:tap style="top:{{CustomBar}}px;height:calc(100vh - {{CustomBar}}px)">
+    <view class="padding" wx:if="{{isLogin}}">
+      <i-avatar class="margin-top" size="large">
+        <open-data type="userAvatarUrl" />
+      </i-avatar>
+      <view class="text-bold margin-top-lg">用户名：{{userName}}</view>
+      <view class="text-bold margin-top">ID：{{userID}}</view>
+      <view class="text-bold margin-top">工种：{{userType}}</view>
+      <view class="flex justify-center">
+        <button class="cu-btn round bg-green margin-top" bind:tap="goHome">个人主页</button>
+        <button class="cu-btn round bg-gray margin-top margin-left-sm" bind:tap="quit">注销</button>
+      </view>
+    </view>
+    <view wx:else class="padding">
+      <view class="cu-avatar lg round margin-top-xl">
+        <text class="cuIcon-people"></text>
+      </view>
+      <view class="text-bold margin-top-lg">尚未登陆请先登陆</view>
+      <button class="cu-btn round bg-green margin-top" bind:tap="login">登陆</button>
+    </view>
+    <view class="UCenter-bg">
+      <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave"></image>
+    </view>
+  </view>
+</view>
+<view class=" text-lg padding-sm bg-white shadow-warp">
+  <i-row>
+    <i-col span="8">
+      <text class="text-black text-bold">设备编号：</text>
+    </i-col>
+    <i-col span="8">
+      <text class="text-black text-bold">设备类型：</text>
+    </i-col>
+    <i-col span="8">
+      <text class="text-black text-bold">设备型号：</text>
+    </i-col>
+  </i-row>
+  <i-row>
+    <i-col span="8">
+      <text class="text-black text-bold">{{device}}</text>
+    </i-col>
+    <i-col span="8">
+      <text class="text-black text-bold">{{device_type}}</text>
+    </i-col>
+    <i-col span="8">
+      <text class="text-black text-bold">{{device_model}}</text>
+    </i-col>
+  </i-row>
+</view>
+<form bind:submit="formSubmit">
+  <view hidden="{{step!='first'}}">
+    <i-row wx:if="{{show_error_1}}">
+      <i-col span="24">
+        <view class="text-sm padding-sm">
+          <text class="text-red text-shadow">必须上传图片</text>
+        </view>
+      </i-col>
+    </i-row>
+    <view class="cu-bar bg-white margin-top-sm">
+      <view class="action">图片上传</view>
+      <view class="action">{{imgList.length}}/4</view>
+    </view>
+    <view class="cu-form-group">
+      <view class="grid col-4 grid-square flex-sub">
+        <view class="bg-img" wx:for="{{imgList}}" wx:key="{{index}}" bindtap="ViewImage" data-url="{{imgList[index]}}">
+          <image src="{{imgList[index]}}" mode='aspectFill' />
+          <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+            <text class="cuIcon-close" />
+          </view>
+        </view>
+        <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<4}}">
+          <text class="cuIcon-cameraadd" />
+        </view>
+      </view>
+    </view>
+    <i-row>
+      <view class=" text-l padding">
+        <i-col span="24">
+          <text class="text-gray text-bold">问题描述：</text>
+        </i-col>
+      </view>
+    </i-row>
+    <i-row wx:if="{{show_error_2}}">
+      <i-col span="24">
+        <view class="text-sm padding-sm">
+          <text class="text-red text-shadow">问题描述不能为空</text>
+        </view>
+      </i-col>
+    </i-row>
+    <view hidden="{{modalName=='DrawerModal'}}" class="cu-form-group margin-top-sm">
+      <textarea value="{{detail_init}}" name="problem" maxlength="200" style="height: 200rpx;" bindinput="textareaInput" placeholder="不要超过200字~" />
+    </view>
+    <view hidden="{{modalName!='DrawerModal'}}" class="cu-form-group margin-top-sm">
+      <view class="margin-tb" style="height: 200rpx; word-break: break-all;">{{detail}}</view>
+    </view>
+    <i-row>
+      <view class=" text-l padding">
+        <i-col span="24">
+          <text class="text-gray text-bold">联系方式：</text>
+        </i-col>
+      </view>
+    </i-row>
+    <i-row wx:if="{{show_error_3}}">
+      <i-col span="24">
+        <view class="text-sm padding-sm">
+          <text class="text-red text-shadow">联系方式不能为空</text>
+        </view>
+      </i-col>
+    </i-row>
+    <view class="cu-form-group margin-top-sm">
+      <view class="title">手机号码</view>
+      <input name="phone" value="{{phone_init}}" type="number" placeholder="" bindinput="phoneNumber"></input>
+      <view class="cu-capsule radius">
+        <view class="cu-tag bg-blue">+86</view>
+        <view class="cu-tag line-blue">中国大陆</view>
+      </view>
+    </view>
+  </view>
+  <view hidden="{{step!='second'}}">
+    <i-row>
+      <view class=" text-l padding">
+        <i-col span="24">
+          <text class="text-gray text-bold">问题类型：</text>
+        </i-col>
+      </view>
+    </i-row>
+    <i-row wx:if="{{show_error_4}}">
+      <i-col span="24">
+        <view class="text-sm padding-sm">
+          <text class="text-red text-shadow">问题类型不能为空</text>
+        </view>
+      </i-col>
+    </i-row>
+    <view class="cu-form-group margin-top-sm solid-buttom">
+      <view class="title">问题类型</view>
+      <input name="problem_type" placeholder=""></input>
+    </view>
+    <view class="bg-white padding margin-top cu-bar">
+      是否需要替换整个器件
+      <switch bind:change="switchChange" />
+    </view>
+    <view class=" text-l padding-sm" wx:if="{{!beReplaced}}">
+      <text class="text-gray text-bold">需求配件：</text>
+      <i-row wx:if="{{show_error_5}}">
+        <i-col span="24">
+          <view class="text-sm padding-tb-sm">
+            <text class="text-red text-shadow">配件类型不能为空</text>
+          </view>
+        </i-col>
+      </i-row>
+      <view class="cu-list menu margin-top-sm card-menu">
+        <view class="cu-item cu-form-group" wx:for="{{index}}" wx:for-index="idx" wx:key>
+          <picker name='picker{{idx}}' data-id="{{idx}}" bindchange="PickerChange" value="{{index[idx]}}" range="{{picker}}">
+            <view class="picker">{{index[idx]?picker[index[idx]]:'配件类型'}}</view>
+          </picker>
+          <i-input-number name="number{{idx}}" value="{{value[idx]}}" min="1" max="100" data-id="{{idx}}" bind:change="inputNumber" class="margin-left-sm"></i-input-number>
+          <text class="cuIcon-close margin-left-sm" data-id="{{idx}}" bind:tap="delPicker"></text>
+        </view>
+        <view class="cu-item text-center text-xl" style="align-items: center;" bind:tap="addAcc">
+          <text></text>
+          <text class="cuIcon-add text-gray"></text>
+          <text></text>
+        </view>
+      </view>
+    </view>
+    <view class=" text-l padding-sm" wx:else>
+      <text class="text-gray text-bold">更换器件型号：</text>
+      <i-row wx:if="{{show_error_6}}">
+        <i-col span="24">
+          <view class="text-sm padding-tb-sm">
+            <text class="text-red text-shadow">替换器件型号不能为空</text>
+          </view>
+        </i-col>
+      </i-row>
+      <view class="cu-list menu margin-top-sm card-menu">
+        <view class="cu-item cu-form-group">
+          <picker name='picker_replace' bind:change="PickerChange2" value="{{index_replace}}" range="{{picker_r}}">
+            <view class="picker">{{index_replace?picker_r[index_replace]:'器件型号'}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="padding-lr-sm flex flex-direction" wx:if="{{userType=='巡检员'&&step=='second'}}">
+    <button bind:tap="prevStep" class="cu-btn bg-blue margin-top-sm lg">上一步</button>
+  </view>
+  <view class="padding-lr-sm flex flex-direction" wx:if="{{(userType=='巡检员'&&step=='second')||(userType!='巡检员'&&step=='first')}}">
+    <button form-type="submit" class="cu-btn bg-green margin-tb-sm lg animation-{{animation}}">
+      确认提交
+    </button>
+  </view>
+  <view class="padding-sm flex flex-direction" wx:if="{{userType=='巡检员'&&step=='first'}}">
+    <button bind:tap="nextStep" class="cu-btn bg-blue margin-tb-sm lg animation-{{animation}}">
+      下一步
+    </button>
+  </view>
+</form>
+<view hidden="{{step!='third'}}" class="text-center">
+  <view class="margin-tb-xl"></view>
+  <view class="text-xsl text-center margin-tb-xl">
+    <text class="cuIcon-roundcheckfill text-green"></text>
+  </view>
+  <view class="text-xxl text-center text-gray">{{result}}</view>
+  <button class="cu-btn bg-green round lg margin-top" bind:tap="goBack">确认</button>
+</view>
+<view class="cu-modal {{showLogin?'show':''}}">
+  <view class="cu-dialog shadow">
+    <view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">员工登陆</view>
+        <view class="action" bindtap="hideLogin">
+          <text class="cuIcon-close text-red"></text>
+        </view>
+      </view>
+      <form bind:submit="formSubmit_lo">
+        <view class="text-sm padding-sm" wx:if="{{show_error}}">
+          <text class="text-red text-shadow">{{error_message}}</text>
+        </view>
+        <view class="cu-form-group solid-bottom" style="text-align: left;">
+          <input placeholder="账号" value="{{_id}}" name="id" />
+        </view>
+        <i-row>
+          <i-col span="24">
+            <view class="cu-form-group solids-bottom " style="text-align: left;">
+              <input placeholder="密码" value="{{_pass}}" name="password" password="{{is_password}}" />
+              <i-icon type="{{eye_status}}" size="24" bind:tap="changeStatus" />
+            </view>
+          </i-col>
+        </i-row>
+        <view class="padding flex flex-direction">
+          <button class="cu-btn bg-blue lg animation-{{animation=='shake'?'shake':''}}" formType="submit">
+            登陆
+          </button>
+        </view>
+      </form>
+    </view>
+  </view>
+</view>
