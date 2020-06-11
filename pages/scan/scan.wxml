@@ -1,0 +1,35 @@
+<!-- pages/scan/scan.wxml -->
+<view class="UCenter-bg bg-blue light">
+    <image src="/img/EportLogo.png" style="width: 200rpx;" class="png" mode="widthFix"></image>
+    <view class="text-xl">健身器材管理系统</view>
+</view>
+<view class="margin-xl"></view>
+<view class="margin-xl"></view>
+<view class="margin-xl"></view>
+<view class="margin-xl"></view>
+<i-row>
+    <i-col span="12" offset="6">
+        <view class="text-center bg-green margin round shadow" bind:tap="Scan">
+            <view class="text-xsl padding">
+                <text class="cuIcon-scan text-white"></text>
+            </view>
+        </view>
+    </i-col>
+</i-row>
+<view class="text-xl text-center margin-tb text-gray">扫码进行报修</view>
+<view class="cu-modal {{showModal?'show':''}}">
+    <view class="cu-dialog">
+        <view class="cu-bar bg-white justify-end">
+            <view class="content text-bold text-red">错误</view>
+            <view class="action" bind:tap="hideModal">
+                <text class="cuIcon-close text-red"></text>
+            </view>
+        </view>
+        <view class="padding text-center">请扫描设备提供的二维码</view>
+        <view class="cu-bar bg-white justify-end">            
+            <view class="action">
+                <button class="cu-btn bg-green margin-left" bind:tap="hideModal">确定</button>
+            </view>
+        </view>
+    </view>
+</view>
