@@ -1,0 +1,54 @@
+/* pages/home/home.wxss */
+
+.UCenter-bg .gif-wave {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    mix-blend-mode: screen;
+    height: 100rpx;
+}
+
+.UCenter-bg {
+    background-color: #0081ff;
+    background-size: cover;
+    height: 550rpx;
+    display: flex;
+    justify-content: center;
+    padding-top: 40rpx;
+    overflow: hidden;
+    position: relative;
+    flex-direction: column;
+    text-align: center;
+    color: #fff;
+    font-weight: 300;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.scan-icon {
+    position: fixed;
+    height: 100rpx;
+    width: 100rpx;
+    line-height: 100rpx;
+    bottom: 50rpx;
+    right: 80rpx;
+    background-color: #0081ff;
+    border-radius: 50%;      
+    -moz-border-radius: 50%;      
+    -webkit-border-radius: 50%;
+}
+
+map,
+.mapBox {
+    left: 0;
+    z-index: 99;
+    mix-blend-mode: screen;
+    height: 100rpx;
+}
+
+map,
+.mapBox {
+    width: 750rpx;
+    height: 300rpx;
+}

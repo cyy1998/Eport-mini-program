@@ -1,0 +1,136 @@
+<!-- pages/home/home.wxml -->
+<view class="UCenter-bg">
+  <view class="padding" wx:if="{{isLogin}}">
+    <i-avatar class="margin-top" size="large">
+      <open-data type="userAvatarUrl" />
+    </i-avatar>
+    <view class="text-bold margin-top-sm">ID：{{userID}}</view>
+    <view class="flex justify-center">
+      <view class="text-bold margin-top-sm">用户名：{{userName}}</view>
+      <view class="text-bold margin-top-sm margin-left-sm">工种：{{userType}}</view>
+    </view>
+    <view class="flex justify-center">
+      <button class="cu-btn round bg-green margin-top" style="z-index: 1000;" bind:tap="turnMap">
+        附近器材
+      </button>
+      <button class="cu-btn round bg-gray margin-top margin-left-sm" style="z-index: 1000;" bind:tap="quit">
+        注销
+      </button>
+    </view>
+  </view>
+  <view wx:else class="padding">
+    <view class="cu-avatar lg round margin-top-xl">
+      <text class="cuIcon-people"></text>
+    </view>
+    <view class="text-bold margin-top-lg">尚未登陆请先登陆</view>
+    <button class="cu-btn round bg-green margin-top" style="z-index: 1000;" bind:tap="login">
+      登陆
+    </button>
+  </view>
+  <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave"></image>
+</view>
+<view wx:if="{{isLogin}}">
+  <view class="bg-white text-lg padding shadow-warp">待完成的{{userType=='巡检员'?'报修单':'工单'}}</view>
+  <swiper class="card-swiper square-dot" current="{{current}}" indicator-dots="true" circular="true" bindchange="cardSwiper" indicator-color="#8799a3" indicator-active-color="#0081ff">
+    <swiper-item wx:for="{{swiperList}}" wx:key class="{{cardCur==index?'cur':''}}">
+      <view class="swiper-item bg-white padding shadow" data-id="{{index}}" bind:tap="showInformation">
+        <view>{{userType=='巡检员'?'报修单':'工单'}}编号：{{swiperList[index]['id']}}</view>
+        <view class="margin-top-sm">设备编号：{{swiperList[index]['device']}}</view>
+        <view class="margin-top-sm">设备地址：{{swiperList[index]['address']}}</view>
+        <view class="margin-top-sm" wx:if="{{userType=='巡检员'}}">
+          联系方式：{{swiperList[index]['phone']}}
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+  <view class="scan-icon text-center text-xl" bind:tap="Scan">
+    <text class="cuIcon-scan text-white"></text>
+  </view>
+</view>
+<view wx:if="{{!isLogin}}" class="text-xsl text-gray text-center margin-xl">请先登陆</view>
+<view class="cu-modal {{showLogin?'show':''}}">
+  <view class="cu-dialog shadow">
+    <view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">员工登陆</view>
+        <view class="action" bind:tap="hideLogin">
+          <text class="cuIcon-close text-red"></text>
+        </view>
+      </view>
+      <form bind:submit="formSubmit_lo">
+        <view class="text-sm padding-sm" wx:if="{{show_error}}">
+          <text class="text-red text-shadow">{{error_message}}</text>
+        </view>
+        <view class="cu-form-group solid-bottom" style="text-align: left;">
+          <input placeholder="账号" value="{{_id}}" name="id" />
+        </view>
+        <i-row>
+          <i-col span="24">
+            <view class="cu-form-group solids-bottom " style="text-align: left;">
+              <input placeholder="密码" value="{{_pass}}" name="password" password="{{is_password}}" />
+              <i-icon type="{{eye_status}}" size="24" bind:tap="changeStatus" />
+            </view>
+          </i-col>
+        </i-row>
+        <view class="padding flex flex-direction">
+          <button class="cu-btn bg-blue lg animation-{{animation=='shake'?'shake':''}}" formType="submit">
+            登陆
+          </button>
+        </view>
+      </form>
+    </view>
+  </view>
+</view>
+<view class="cu-modal {{showInfo?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content ">{{userType=='巡检员'?'报修单':'工单'}}编号：{{orderID}}</view>
+      <view class="action" bind:tap="hideInformation">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-sm" style="text-align: left">设备编号：{{device}}</view>
+    <view class="padding-sm" style="text-align: left">设备地址：{{address}}</view>
+    <view class="padding-sm" style="text-align: left">现场图片：</view>
+    <view class="cu-form-group">
+      <view class="grid col-4 grid-square flex-sub margin-top-sm">
+        <view class="bg-img" style="text-align: left" wx:for="{{imgList}}" wx:key="{{index}}" bindtap="ViewImage" data-url="{{imgList[index]}}">
+          <image src="{{imgList[index]}}" mode="aspectFill" />
+        </view>
+      </view>
+    </view>
+    <view class="padding-sm" style="text-align: left" wx:if="{{userType=='巡检员'}}">问题描述：</view>
+    <view class="padding-lr-sm" style="text-align: left" wx:if="{{userType=='巡检员'}}">
+      {{detail}}
+    </view>
+    <view class="padding-sm" style="text-align: left" wx:if="{{userType=='巡检员'}}">
+      联系人：{{phone}}
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action" wx:if="{{userType=='巡检员'}}">
+        <button class="cu-btn line-red text-red" bind:tap="Delete">删除</button>
+        <button class="cu-btn bg-green margin-left" bind:tap="Edit">编辑</button>
+      </view>
+      <view class="action" wx:if="{{userType=='维修员'}}">
+        <button class="cu-btn bg-green margin-left" bind:tap="hideInformation">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-modal {{showModalErr?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content text-bold text-red">错误</view>
+      <view class="action" bind:tap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding text-center">{{text_err}}</view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn bg-green margin-left" bind:tap="hideModal">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+<i-toast id="toast" style="z-index: 150000;" />
